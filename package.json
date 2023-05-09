@@ -2,7 +2,7 @@
   "name": "goit-js-hw11",
   "version": "2.0.0",
   "description": "",
-  "homepage": "https://agnieszkaiwan.github.io/goit-js-hw11"
+  "homepage": "https://agnieszkaiwan.github.io/goit-js-hw11",
   "scripts": {
     "start": "parcel src/*.html",
     "build": "parcel build src/*.html --public-url /goit-js-hw11/"
@@ -18,7 +18,10 @@
     "url": "https://github.com/AgnieszkaIwan/goit-js-hw11/issues"
   },
   "dependencies": {
-    "modern-normalize": "^1.1.0"
+    "axios": "^1.4.0",
+    "modern-normalize": "^1.1.0",
+    "notiflix": "^3.2.6",
+    "simplelightbox": "^2.14.0"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.6.0",
