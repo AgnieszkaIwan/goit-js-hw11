@@ -1,3 +1,4 @@
+import '../src/css/styles.css';
 import axios from 'axios';
 import Notiflix from 'notiflix';
 
@@ -69,3 +70,70 @@ searchForm.addEventListener('submit', e => {
       );
     });
 });
+
+async function fetchImages() {
+  try {
+    const response = await axios.get(API_URL, {
+      params: {
+        key: API_KEY,
+        q: searchQuery,
+        image_type: 'photo',
+        orientation: 'horizontal',
+        safesearch: true,
+        per_page: 40, //liczba obiektów na stronie
+        page: pageNumber, //numer strony
+      },
+    });
+
+    const hits = response.data.hits;
+    const totalHits = response.data.totalHits;
+
+    if (hits.length === 0) {
+      // pokaz powiadomienie, ze nie znaleziono obrazkow
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+    } else {
+      //dodaj obrazy do galerii
+      const gallery = document.querySelector('.gallery');
+      hits.forEach(hit => {
+        const card = createPhotoCard(hit);
+        gallery.insertAdjacentHTML('beforeend', card);
+      });
+
+      //jeśli pobrano mniej obrazków niż per_page - koniec kolekcji
+      if (pageNumber * 40 >= totalHits) {
+        loadMoreBtn.style.display = 'none';
+        Notiflix.Notify.info(
+          "We're sorry, but you've reached the end of search results."
+        );
+      } else {
+        //w innym przypadku pokaz przycisk
+        loadMoreBtn.style.display = 'block';
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const loadMoreBtn = document.getElementById('load-more');
+
+let pageNumber;
+
+loadMoreBtn.addEventListener('click', () => {
+  pageNumber += 1;
+  fetchImages();
+});
+
+// loadMoreBtn.style.display = 'none'; // początkowo ukryj przycisk
+
+// if (response.data.hits.length === 0) {
+//   // wyświetl powiadomienie o braku wyników i ukryj przycisk
+//   gallery.innerHTML = '<p>No results found.</p>';
+//   loadMoreBtn.style.display = 'none';
+// } else {
+//   // wyświetl kolejne obrazy i pokaż przycisk "load more"
+//   gallery.insertAdjacentHTML('beforeend', markup);
+//   loadMoreBtn.style.display = 'block';
+// }
