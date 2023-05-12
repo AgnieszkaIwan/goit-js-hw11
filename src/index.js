@@ -10,6 +10,7 @@ const gallery = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector('.load-more');
 let page = 1;
 let currentPage = 1;
+let totalHits = 0;
 
 searchForm.addEventListener('submit', e => {
   e.preventDefault();
@@ -43,6 +44,8 @@ function searchImages(searchQuery, page) {
     })
     .then(response => {
       const photos = response.data.hits;
+      totalHits = response.data.totalHits; // update totalHits with the new value
+
       if (photos.length === 0) {
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
@@ -93,7 +96,7 @@ function searchImages(searchQuery, page) {
       }
 
       Notiflix.Notify.success(
-        `Found ${photos.length} images for "${searchQuery}"`
+        `Found ${response.data.totalHits} images for "${searchQuery}"`
       );
 
       // // show loadMoreBtn if there are more pages of results
